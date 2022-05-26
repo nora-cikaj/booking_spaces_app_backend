@@ -1,15 +1,9 @@
-import express, { Express, Request, Response } from 'express';
-import dotenv from 'dotenv';
+import initExpressApp from './app/app';
+import config from './app/config/var/development';
 
-dotenv.config();
-
-const app: Express = express();
-const port = process.env.PORT;
-
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello world!');
-});
-
-app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
-});
+(async () => {
+  const app = await initExpressApp();
+  app.listen(config.port, () => {
+    console.log(`Server is up on port ${config.port}`);
+  });
+})();

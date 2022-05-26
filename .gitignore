@@ -4,3 +4,4 @@ test.env
 .env
 logs
 DS_STORE
+.DS_Store

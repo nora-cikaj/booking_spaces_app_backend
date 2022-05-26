@@ -25,7 +25,8 @@
         "tsx": "never"
       }
     ],
-    "consistent-return": 0
+    "consistent-return": 0,
+    "no-undef": 0
   },
   "settings": {
     "import/resolver": {
