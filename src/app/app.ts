@@ -1,11 +1,19 @@
-import express from 'express';
+/* eslint-disable arrow-body-style */
 import Path from 'path';
+import express from 'express';
+import session from 'express-session';
+import cors from 'cors';
 import YAML from 'yamljs';
 import SwaggerUI from 'swagger-ui-express';
 import SwaggerJsdoc from 'swagger-jsdoc';
+import passport from 'passport';
 import { initLoggerService } from './config/logger/index';
 import errorHandler from './middleware/error_middleware';
-import routes from './routes';
+import authenticated from './middleware/authenticated';
+import routes from './constants/routes';
+import router from './routes';
+import config from './config/var/development';
+import { CustomRequest } from './types/express';
 
 const initExpressApp = async () => {
   const app = express();
@@ -13,7 +21,36 @@ const initExpressApp = async () => {
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
-  app.use('/api/v1', routes);
+  app.use(cors({ origin: config.appUrl, credentials: true }));
+  app.set('trust proxy', 1);
+
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET,
+      resave: true,
+      saveUninitialized: true,
+      // Cookies added only on production (https protocol)
+      // cookie: {
+      //   sameSite: 'none',
+      //   secure: true,
+      //   maxAge: 1000 * 60 * 60 * 24 * 7, // One Week
+      // },
+    }),
+  );
+
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+  app.use(routes.BASE, router);
+
+  // Will be removed, testing purpose
+  app.get('/', (req, res) => {
+    return res.send(`<a href="${routes.BASE}${routes.AUTH}/login">Authenticate with Google</a>`);
+  });
+
+  app.get('/protected', authenticated, (req: CustomRequest, res) => {
+    return res.send(`Hello ${req.user.name}`);
+  });
 
   // Setup docs
 
