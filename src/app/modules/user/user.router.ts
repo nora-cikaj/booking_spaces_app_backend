@@ -30,6 +30,8 @@ const router = Router();
  *          type: "string"
  *        admin:
  *          type: "boolean"
+ *        createdAt:
+ *          type: "string"
  *
  * paths:
  *  /user:
@@ -89,17 +91,16 @@ router.route(`${routes.USER}`).get(
  *                avatarUrl:
  *                  type: "string"
  *      responses:
- *        201:
+ *        200:
  *          description: Users created successfully
  *          content:
  *            application/json:
  *              schema:
  *                $ref: "#components/schemas/User"
+ *        400:
  *          $ref: "#components/responses/400"
  *        401:
  *          $ref: "#components/responses/401"
- *        404:
- *          $ref: "#components/responses/404"
  *        500:
  *          $ref: "#components/responses/500"
  */
@@ -133,8 +134,6 @@ router.route(`${routes.USER}`).post(
  *                $ref: "#components/schemas/User"
  *        401:
  *          $ref: "#components/responses/401"
- *        404:
- *          $ref: "#components/responses/404"
  *        500:
  *          $ref: "#components/responses/500"
  */

@@ -86,10 +86,13 @@ components:
     401:
       description: Not Authenticated
       content:
-        text/plain:
+        application/json:
           schema:
-            type: string
-            example: "Unauthorized"
+            $ref: "#/components/schemas/Error"
+          example:
+            code: ckgjkxvgl000431pp4xlpew2g
+            name: Not Authenticated
+            message: Missing authentication or invalid credentials
     403:
       description: Not Authorized / Forbidden
       content:

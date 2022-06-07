@@ -23,7 +23,7 @@ export const upsertUser = async (
   const requestBody: CreateUserRequestBody = req.body;
   try {
     const createdUser: User = await service.upsertUser({ requestBody });
-    res.status(201).send(createdUser);
+    res.status(200).send(createdUser);
   } catch (e) {
     next(e);
   }

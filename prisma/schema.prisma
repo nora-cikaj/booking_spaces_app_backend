@@ -18,15 +18,21 @@ model User {
   email     String        @unique
   avatarUrl String        @map("avatar_url")
   admin     Boolean
+  createdAt DateTime      @default(now()) @map("created_at")
   bookings  BookingUser[]
+  spaces    Space[]
 }
 
 model Space {
-  id           Int       @id @default(autoincrement())
-  name         String
-  capacity     Int
-  min_capacity Int?
-  bookings     Booking[]
+  id              Int       @id @default(autoincrement())
+  name            String    @unique()
+  capacity        Int
+  minCapacity     Int?      @map("min_capacity")
+  timeRestriction Int?      @map("time_restriction")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  creator         User?     @relation(fields: [createdBy], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  createdBy       String    @map("created_by")
+  bookings        Booking[]
 }
 
 model Booking {
@@ -34,7 +40,7 @@ model Booking {
   title       String
   description String?
   bookingType BookingType   @map("booking_type")
-  space       Space         @relation(fields: [spaceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  space       Space?        @relation(fields: [spaceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   spaceId     Int           @map("space_id")
   fromTime    DateTime      @map("from_time")
   toTime      DateTime      @map("to_time")
@@ -44,11 +50,11 @@ model Booking {
 }
 
 model BookingUser {
-  id        Int     @id @default(autoincrement())
-  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  bookingId Int     @map("booking_id")
-  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId    String  @map("user_id")
+  id        Int      @id @default(autoincrement())
+  booking   Booking? @relation(fields: [bookingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  bookingId Int      @map("booking_id")
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    String   @map("user_id")
 }
 
 enum BookingType {
