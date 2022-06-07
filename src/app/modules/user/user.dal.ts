@@ -8,12 +8,25 @@ export const listUsers = async (): Promise<User[]> => {
   return response;
 };
 
-export const insertUser = async ({ data }): Promise<User> => {
-  const response = await prisma.user.create({ data });
+export const upsertUser = async ({ query, updateData, createData }): Promise<User> => {
+  const response = await prisma.user.upsert({
+    where: query,
+    create: createData,
+    update: updateData,
+  });
   return response;
 };
 
 export const readUser = async ({ query }): Promise<User> => {
   const response = await prisma.user.findUnique({ where: query });
   return response;
+};
+
+export const updateUser = async ({ query, data }): Promise<User> => {
+  const response = await prisma.user.update({ where: query, data });
+  return response;
+};
+
+export const deleteUser = async ({ query }): Promise<void> => {
+  await prisma.user.delete({ where: query });
 };

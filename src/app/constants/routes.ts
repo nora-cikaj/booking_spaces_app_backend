@@ -3,4 +3,5 @@ export default {
   HEALTH: '/health',
   AUTH: '/auth',
   USER: '/user',
+  SPACE: '/space',
 };

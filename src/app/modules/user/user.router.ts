@@ -1,5 +1,6 @@
 import Router from 'express';
 import authenticated from '../../middleware/authenticated';
+import authorized from '../../middleware/authorize';
 import * as controller from './user.controller';
 import routes from '../../constants/routes';
 
@@ -18,7 +19,7 @@ const router = Router();
  *        - admin
  *      properties:
  *        id:
- *          type: "integer"
+ *          type: "string"
  *        name:
  *          type: "string"
  *        lastName:
@@ -35,7 +36,7 @@ const router = Router();
  *    get:
  *      tags:
  *        - User
- *      summery: Get users
+ *      summary: Get users
  *      description: Get all users
  *      responses:
  *        200:
@@ -65,14 +66,28 @@ router.route(`${routes.USER}`).get(
  *    post:
  *      tags:
  *        - User
- *      summery: Create user
- *      description: Create a new user
+ *      summary: Upsert user
+ *      description: Create a new user or update the existing one
  *      requestBody:
  *        required: true
  *        content:
  *          application/json:
  *            schema:
- *              $ref: '#components/schemas/User'
+ *              type: "object"
+ *              required:
+ *                - id
+ *                - email
+ *              properties:
+ *                id:
+ *                  type: "string"
+ *                name:
+ *                  type: "string"
+ *                lastName:
+ *                  type: "string"
+ *                email:
+ *                  type: "string"
+ *                avatarUrl:
+ *                  type: "string"
  *      responses:
  *        201:
  *          description: Users created successfully
@@ -80,6 +95,7 @@ router.route(`${routes.USER}`).get(
  *            application/json:
  *              schema:
  *                $ref: "#components/schemas/User"
+ *          $ref: "#components/responses/400"
  *        401:
  *          $ref: "#components/responses/401"
  *        404:
@@ -90,7 +106,7 @@ router.route(`${routes.USER}`).get(
 
 router.route(`${routes.USER}`).post(
   authenticated,
-  controller.createUser,
+  controller.upsertUser,
 );
 
 /**
@@ -100,12 +116,12 @@ router.route(`${routes.USER}`).post(
  *    get:
  *      tags:
  *        - User
- *      summery: Get user
+ *      summary: Get user
  *      description: Get a single user
  *      parameters:
  *        - in: path
  *          name: id
- *          type: number
+ *          type: string
  *          required: true
  *          description: User id
  *      responses:
@@ -128,4 +144,76 @@ router.route(`${routes.USER}/:id`).get(
   controller.getSingleUser,
 );
 
+/**
+ * @openapi
+ * paths:
+ *  /user/{id}:
+ *    patch:
+ *      tags:
+ *        - User
+ *      summary: Update permissions
+ *      description: Update permissions
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          type: string
+ *          required: true
+ *          description: User id
+ *        - in: query
+ *          name: admin
+ *          type: boolean
+ *          required: true
+ *          description: Admin
+ *      responses:
+ *        204:
+ *          description: Users updated successfully
+ *        401:
+ *          $ref: "#components/responses/401"
+ *        403:
+ *          $ref: "#components/responses/403"
+ *        404:
+ *          $ref: "#components/responses/404"
+ *        500:
+ *          $ref: "#components/responses/500"
+ */
+
+router.route(`${routes.USER}/:id`).patch(
+  authenticated,
+  authorized,
+  controller.updateUser,
+);
+
+/**
+ * @openapi
+ * paths:
+ *  /user/{id}:
+ *    delete:
+ *      tags:
+ *        - User
+ *      summary: Delete user
+ *      description: Delete user
+ *      parameters:
+ *        - in: path
+ *          name: id
+ *          type: string
+ *          required: true
+ *          description: User id
+ *      responses:
+ *        204:
+ *          description: Users deleted successfully
+ *        401:
+ *          $ref: "#components/responses/401"
+ *        403:
+ *          $ref: "#components/responses/403"
+ *        404:
+ *          $ref: "#components/responses/404"
+ *        500:
+ *          $ref: "#components/responses/500"
+ */
+
+router.route(`${routes.USER}/:id`).delete(
+  authenticated,
+  authorized,
+  controller.deleteUser,
+);
 export default router;

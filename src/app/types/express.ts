@@ -1,7 +1,6 @@
 import { Request } from 'express';
 
 export type User = {
-  displayName?: string,
   id: string,
   name?: string,
   lastName?: string,

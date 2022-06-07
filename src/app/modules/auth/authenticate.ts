@@ -1,5 +1,5 @@
 import Passport from 'passport';
-import { insertUser, readUser } from '../user/user.dal';
+import { getSingleUser, upsertUser } from '../user/user.service';
 import routes from '../../constants/routes';
 import { User } from '../../types/express';
 
@@ -10,7 +10,7 @@ Passport.serializeUser((user: User, done: any) => {
 });
 
 Passport.deserializeUser(async (id: string, done: any) => {
-  const user = await readUser({ query: { id } });
+  const user = await getSingleUser({ id });
   done(null, user);
 });
 
@@ -22,25 +22,18 @@ Passport.use(new GoogleStrategy(
     passReqToCallback: true,
   },
   (async (request, accessToken, refreshToken, profile, done) => {
-    const user = await readUser({
-      query: {
-        id: profile.id,
-      },
-    });
-
-    if (!user) {
-      const newUser: User = {
-        id: profile.id,
-        name: profile.given_name,
-        lastName: profile.family_name,
-        email: profile.email,
-        avatarUrl: profile.picture,
-        admin: false,
-      };
-      const addedUser = await insertUser({ data: newUser });
-      done(null, addedUser);
-    } else {
+    const newUser = {
+      id: profile.id,
+      name: profile.given_name,
+      lastName: profile.family_name,
+      email: profile.email,
+      avatarUrl: profile.picture,
+    };
+    try {
+      const user = await upsertUser({ requestBody: newUser });
       done(null, user);
+    } catch (e) {
+      // done(e, null);
     }
   }),
 ));
