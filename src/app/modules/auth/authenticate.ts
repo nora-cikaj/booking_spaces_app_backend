@@ -1,9 +1,8 @@
 import Passport from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth2';
 import { getSingleUser, upsertUser } from '../user/user.service';
 import routes from '../../constants/routes';
 import { User } from '../../types/express';
-
-const GoogleStrategy = require('passport-google-oauth2').Strategy;
 
 Passport.serializeUser((user: User, done: any) => {
   done(null, user.id);
@@ -33,7 +32,7 @@ Passport.use(new GoogleStrategy(
       const user = await upsertUser({ requestBody: newUser });
       done(null, user);
     } catch (e) {
-      // done(e, null);
+      done(e, null);
     }
   }),
 ));

@@ -43,7 +43,7 @@ const router = Router();
  *    post:
  *      tags:
  *        - Space
- *      summery: Create a space
+ *      summary: Create a space
  *      description: Create a new space
  *      requestBody:
  *        required: true
@@ -94,7 +94,7 @@ router.route(`${routes.SPACE}`).post(
  *    get:
  *      tags:
  *        - Space
- *      summery: Get a space
+ *      summary: Get a space
  *      description: Get a space
  *      parameters:
  *        - in: path
@@ -131,7 +131,7 @@ router.route(`${routes.SPACE}/:id`).get(
  *    get:
  *      tags:
  *        - Space
- *      summery: Get all spaces
+ *      summary: Get all spaces
  *      description: Get all spaces
  *      responses:
  *        200:
@@ -161,7 +161,7 @@ router.route(`${routes.SPACE}`).get(
  *    patch:
  *      tags:
  *        - Space
- *      summery: Update a space
+ *      summary: Update a space
  *      description: Update a space
  *      parameters:
  *        - in: path
@@ -217,7 +217,7 @@ router.route(`${routes.SPACE}/:id`).patch(
  *    delete:
  *      tags:
  *        - Space
- *      summery: Delete a space
+ *      summary: Delete a space
  *      description: Delete a space
  *      parameters:
  *        - in: path

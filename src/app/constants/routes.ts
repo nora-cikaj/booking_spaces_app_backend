@@ -4,4 +4,5 @@ export default {
   AUTH: '/auth',
   USER: '/user',
   SPACE: '/space',
+  BOOKING: '/booking',
 };

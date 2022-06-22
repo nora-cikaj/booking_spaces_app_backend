@@ -42,11 +42,13 @@ model Booking {
   bookingType BookingType   @map("booking_type")
   space       Space?        @relation(fields: [spaceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   spaceId     Int           @map("space_id")
-  fromTime    DateTime      @map("from_time")
-  toTime      DateTime      @map("to_time")
-  repeat      RepeatType
-  end_by      DateTime?
-  users       BookingUser[]
+  fromTime    BigInt        @map("from_time")
+  toTime      BigInt        @map("to_time")
+  repeat      Boolean
+  interval    Int?
+  endBy       BigInt?       @map("end_by")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  attendees   BookingUser[]
 }
 
 model BookingUser {
@@ -55,18 +57,11 @@ model BookingUser {
   bookingId Int      @map("booking_id")
   user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId    String   @map("user_id")
+  creator   Boolean  @default(false)
 }
 
 enum BookingType {
-  userBooking
-  internalUse
-  unavailable
-}
-
-enum RepeatType {
-  none
-  daily
-  weekly
-  monthly
-  yearly
+  USER_BOOKING
+  INTERNAL_USE
+  UNAVAILABLE
 }
