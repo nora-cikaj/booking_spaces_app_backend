@@ -258,8 +258,8 @@ router.route(`${routes.BOOKING}/:id`).get(
  *                type: "array"
  *                items:
  *                  $ref: "#components/schemas/Booking"
- *        401:
- *          $ref: "#components/responses/401"
+ *        400:
+ *          $ref: "#components/responses/400"
  *        401:
  *          $ref: "#components/responses/401"
  *        403:
