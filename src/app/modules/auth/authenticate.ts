@@ -1,16 +1,16 @@
 import Passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth2';
-import { getSingleUser, upsertUser } from '../user/user.service';
+import { upsertUser } from '../user/user.service';
 import routes from '../../constants/routes';
 import { User } from '../../types/express';
 
 Passport.serializeUser((user: User, done: any) => {
-  done(null, user.id);
+  done(null, user);
 });
 
-Passport.deserializeUser(async (id: string, done: any) => {
-  const user = await getSingleUser({ id });
-  done(null, user);
+Passport.deserializeUser(async (user: User, done: any) => {
+  const newUser = await upsertUser({ requestBody: user });
+  done(null, newUser);
 });
 
 Passport.use(new GoogleStrategy(
@@ -29,8 +29,7 @@ Passport.use(new GoogleStrategy(
       avatarUrl: profile.picture,
     };
     try {
-      const user = await upsertUser({ requestBody: newUser });
-      done(null, user);
+      done(null, newUser);
     } catch (e) {
       done(e, null);
     }

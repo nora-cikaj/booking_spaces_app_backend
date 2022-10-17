@@ -304,7 +304,7 @@ router.route(`${routes.BOOKING}/:id`).put(
  *          desctiption: End time
  *      responses:
  *        200:
- *          description: Booking created successfully
+ *          description: Booking deleted successfully
  *          content:
  *            application/json:
  *              schema:

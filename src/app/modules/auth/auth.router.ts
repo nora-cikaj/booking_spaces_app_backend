@@ -38,7 +38,7 @@ router.route(`${routes.AUTH}/login`).get(
 
 router.route(`${routes.AUTH}/login/callback`).get(
   Passport.authenticate('google', {
-    successRedirect: '/protected',
+    successRedirect: 'http://localhost:3000/authenticate',
     failureRedirect: '/auth/google/failure',
   }),
 );
@@ -51,11 +51,11 @@ router.route(`${routes.AUTH}/logout`).get(
       }
     });
     req.session.destroy();
-    res.status(200).send('LoggedOut');
+    res.status(200).send();
   },
 );
 
-router.route(`${routes.AUTH}/failure`).get(
+router.route(`${routes.AUTH}/google/failure`).get(
   (req: CustomRequest, res: Response) => {
     res.status(400).send('Failed to authenticate');
   },

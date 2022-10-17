@@ -4,7 +4,7 @@ import { User } from '../../types/express';
 const prisma = new PrismaClient();
 
 export const listUsers = async (): Promise<User[]> => {
-  const response: User[] = await prisma.user.findMany({});
+  const response: User[] = await prisma.user.findMany();
   return response;
 };
 

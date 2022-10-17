@@ -9,7 +9,7 @@ export const validateCreateSpaceRequest = ({ requestBody }): CreateSpaceRequestB
     name: Joi.string().required().trim(true),
     capacity: Joi.number().required().min(1),
     minCapacity: Joi.number().min(1).max(requestBody.capacity),
-    timeRestrinction: Joi.number(),
+    timeRestriction: Joi.number(),
   }).required();
 
   const result = schema.validate(requestBody);
@@ -37,7 +37,7 @@ export const validateUpdateSpaceRequest = ({ requestBody }): UpdateSpaceRequestB
     name: Joi.string().trim(true),
     capacity: Joi.number().min(1),
     minCapacity: Joi.number().min(1),
-    timeRestrinction: Joi.number(),
+    timeRestriction: Joi.number(),
   }).required().min(1);
 
   const result = schema.validate(requestBody);

@@ -137,7 +137,8 @@ export const validateOverlaping = async ({
           )
         )) OR 
         (${repeat} = true AND from_time > ${toTime} AND (${endBy} = 0 OR ${endBy} > from_time) AND (
-          ((from_time - ${fromTime}) % ${interval} < (to_time - from_time) OR 
+          ((from_time - ${fromTime}) % ${interval} < (to_time - from_time) - (${toTime} - ${fromTime}) OR
+            ((from_time - ${fromTime}) % ${interval} < (to_time - from_time)) OR 
             ((from_time - ${fromTime}) % ${interval} > ${interval} - (to_time - from_time))
           ) OR 
           (((to_time - ${toTime}) % ${interval} < (to_time - from_time))
@@ -149,23 +150,8 @@ export const validateOverlaping = async ({
       )
     )`;
 
-  // const query1 = `SELECT id from "Booking"
-  //   WHERE (
-  //     (space_id = ${spaceId}) AND
-  //     (${repeat} = true AND from_time > ${toTime} AND (${endBy} = 0 OR ${endBy} > from_time) AND
-  //     (((from_time - ${fromTime}) % ${interval} < (to_time - from_time) OR
-  //         ((from_time - ${fromTime}) % ${interval} > ${interval} - (to_time - from_time))
-  //       ) OR
-  //       (((to_time - ${toTime}) % ${interval} < (to_time - from_time))
-  //       ) OR
-  //       (((from_time - ${fromTime}) % ${interval} > ${interval} - (to_time - from_time)) AND
-  //         ((to_time - ${toTime}) % ${interval} < (to_time - from_time))
-  //       )
-  //     ))
-  //   )
-  //   `;
-
   const overlapingBooking = await findOverlaping({ query });
+  console.log(overlapingBooking);
 
   if (overlapingBooking.length > 0) {
     const date = new Date(overlapingBooking[0].from_time);

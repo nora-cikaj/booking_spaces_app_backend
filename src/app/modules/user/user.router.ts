@@ -33,6 +33,31 @@ const router = Router();
  *        createdAt:
  *          type: "string"
  *
+ *  /logged-in-user:
+ *    get:
+ *      tags:
+ *        - User
+ *      summary: Get the logged in user
+ *      description: Get the logged in user
+ *      responses:
+ *        200:
+ *          description: User read successfully
+ *          content:
+ *            application/json:
+ *              $ref: "#components/schemas/User"
+ *        401:
+ *          $ref: "#components/responses/401"
+ *        500:
+ *          $ref: "#components/responses/500"
+ */
+
+router.route(`${routes.LOGGED_IN_USER}`).get(
+  authenticated,
+  controller.getLoggedInUser,
+);
+
+/**
+ * @openapi
  * paths:
  *  /user:
  *    get:
@@ -134,6 +159,8 @@ router.route(`${routes.USER}`).post(
  *                $ref: "#components/schemas/User"
  *        401:
  *          $ref: "#components/responses/401"
+ *        404:
+ *          $ref: "#components/responses/404"
  *        500:
  *          $ref: "#components/responses/500"
  */

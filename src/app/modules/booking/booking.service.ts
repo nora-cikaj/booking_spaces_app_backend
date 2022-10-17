@@ -98,6 +98,7 @@ export const createBooking = async (
     repeat: data.repeat,
     spaceId: data.spaceId,
     interval: data.interval,
+    endBy: data.endBy,
   });
 
   const booking = await dal.createBooking({ data });

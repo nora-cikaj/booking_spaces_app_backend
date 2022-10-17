@@ -14,6 +14,7 @@ import routes from './constants/routes';
 import router from './routes';
 import config from './config/var/development';
 import { CustomRequest } from './types/express';
+import './modules/auth/authenticate';
 
 const initExpressApp = async () => {
   const app = express();
@@ -49,7 +50,16 @@ const initExpressApp = async () => {
   });
 
   app.get('/protected', authenticated, (req: CustomRequest, res) => {
-    return res.send(`Hello ${req.user.name}`);
+    return res.send(req.user);
+  });
+
+  app.get('/logout', authenticated, (req: CustomRequest, res, next) => {
+    req.session.destroy((err) => {
+      if (err) {
+        return next(err);
+      }
+      res.redirect('/');
+    });
   });
 
   // Setup docs

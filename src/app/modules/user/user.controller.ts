@@ -3,6 +3,18 @@ import * as service from './user.service';
 import { CustomRequest, User } from '../../types/express';
 import { CreateUserRequestBody } from './user.types';
 
+export const getLoggedInUser = async (
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  const { user } = req;
+  try {
+    res.status(200).send(user);
+  } catch (e) {
+    next(e);
+  }
+};
 export const getUsers = async (
   req: CustomRequest,
   res: Response,

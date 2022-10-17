@@ -10,11 +10,15 @@ servers:
     description: Local development server
     variables:
       port:
-        default: "3000"
+        default: "4000"
       base_path:
         default: "api/v1"
 tags:
   - name: Health
+  - name: Authentication
+  - name: User
+  - name: Space
+  - name: Booking
 
 paths:
   /health:
