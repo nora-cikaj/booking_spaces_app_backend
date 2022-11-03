@@ -1,7 +1,8 @@
 node_modules
-dev.env
-test.env
+.env.dev
+.env.test
 .env
 logs
 DS_STORE
 .DS_Store
+boothup-40d68f850a24.json

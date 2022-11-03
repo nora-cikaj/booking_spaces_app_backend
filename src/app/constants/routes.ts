@@ -6,4 +6,5 @@ export default {
   USER: '/user',
   SPACE: '/space',
   BOOKING: '/booking',
+  EVENT: '/events',
 };

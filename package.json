@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "env-cmd -f ./config/dev.env ts-node src/index.ts",
-    "dev": "env-cmd -f ./config/dev.env nodemon src/index.ts",
-    "test": "env-cmd -f ./config/test.env mocha -r ts-node/register src/**/*.test.ts --timeout 30000 --exit",
+    "start": "env-cmd -f .env ts-node src/index.ts",
+    "dev": "env-cmd -f .env.dev nodemon src/index.ts",
+    "test": "env-cmd -f .env.test mocha -r ts-node/register src/**/*.test.ts --timeout 30000 --exit",
     "lint": "eslint . --ext .ts"
   },
   "author": "",
