@@ -17,7 +17,10 @@ export const expressLoggerConfig = {
       obfuscate: [
         'body.password', // all passwords
       ],
-      path: Path.resolve(__dirname, `../../../../logs/${config.appName}-logs-info.log`),
+      path: Path.resolve(
+        __dirname,
+        `../../../../logs/${config.appName}-logs-info.log`,
+      ),
       period: '3d',
       count: 3,
     },
@@ -36,18 +39,34 @@ export const initLoggerService = () => {
       {
         level: 'debug',
         stream: process.stdout,
-      }, {
+      },
+      {
         level: 'info',
-        path: Path.resolve(__dirname, `../../../../logs/${config.appName}-logs-info.log`),
-      }, {
+        path: Path.resolve(
+          __dirname,
+          `../../../../logs/${config.appName}-logs-info.log`,
+        ),
+      },
+      {
         level: 'warn',
-        path: Path.resolve(__dirname, `../../../../logs/${config.appName}-logs-warn.log`),
-      }, {
+        path: Path.resolve(
+          __dirname,
+          `../../../../logs/${config.appName}-logs-warn.log`,
+        ),
+      },
+      {
         level: 'error',
-        path: Path.resolve(__dirname, `../../../../logs/${config.appName}-logs-error.log`),
-      }, {
+        path: Path.resolve(
+          __dirname,
+          `../../../../logs/${config.appName}-logs-error.log`,
+        ),
+      },
+      {
         level: 'fatal',
-        path: Path.resolve(__dirname, `../../../../logs/${config.appName}-logs-fatal.log`),
+        path: Path.resolve(
+          __dirname,
+          `../../../../logs/${config.appName}-logs-fatal.log`,
+        ),
       },
     ],
   });

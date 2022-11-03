@@ -46,7 +46,9 @@ const initExpressApp = async () => {
 
   // Will be removed, testing purpose
   app.get('/', (req, res) => {
-    return res.send(`<a href="${routes.BASE}${routes.AUTH}/login">Authenticate with Google</a>`);
+    return res.send(
+      `<a href="${routes.BASE}${routes.AUTH}/login">Authenticate with Google</a>`,
+    );
   });
 
   app.get('/protected', authenticated, (req: CustomRequest, res) => {
@@ -71,11 +73,7 @@ const initExpressApp = async () => {
     apis: ['./src/app/**/*.ts'],
   });
 
-  app.use(
-    '/api/swagger',
-    SwaggerUI.serve,
-    SwaggerUI.setup(docs),
-  );
+  app.use('/api/swagger', SwaggerUI.serve, SwaggerUI.setup(docs));
 
   // Error handling
   app.use(errorHandler);
