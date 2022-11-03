@@ -7,5 +7,6 @@ export default {
   USERS: '/users',
   SPACE: '/space',
   BOOKING: '/booking',
+  EVENT: '/events',
   RESOURCES: '/resources',
 };
