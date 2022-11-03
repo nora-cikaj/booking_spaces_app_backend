@@ -13,10 +13,14 @@ const calendar = google.calendar({
   version: 'v3',
   auth: jwtClient,
 });
+
+const service = google.admin({ version: 'directory_v1', auth: jwtClient });
+
 const auth = new google.auth.GoogleAuth({
   keyFile: './boothup-b6649aa108aa.json',
   scopes: SCOPES,
 });
 auth.getClient();
 
-export { auth, calendar };
+export { auth, service, calendar };
+
