@@ -19,6 +19,7 @@ tags:
   - name: User
   - name: Space
   - name: Booking
+  - name: Event
 
 paths:
   /health:
