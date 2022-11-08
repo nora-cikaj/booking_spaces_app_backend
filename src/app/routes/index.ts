@@ -8,6 +8,7 @@ import bookingRouter from '../modules/booking/booking.router';
 import eventRouter from '../modules/event/event.router';
 import usersRouter from '../modules/users/users.router';
 import resourcesRouter from '../modules/resources/resources.router';
+import freebusyRouter from '../modules/freebusy/freebusy.router';
 
 const router = Router();
 
@@ -19,5 +20,6 @@ router.use(bookingRouter);
 router.use(eventRouter);
 router.use(usersRouter);
 router.use(resourcesRouter);
+router.use(freebusyRouter);
 
 export default router;
