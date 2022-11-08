@@ -9,4 +9,5 @@ export default {
   BOOKING: '/booking',
   EVENT: '/events',
   RESOURCES: '/resources',
+  FREEBUSY: '/freebusy',
 };

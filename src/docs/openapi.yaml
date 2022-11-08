@@ -20,6 +20,7 @@ tags:
   - name: Space
   - name: Booking
   - name: Event
+  - name: Freebusy
 
 paths:
   /health:
