@@ -13,25 +13,27 @@ Passport.deserializeUser(async (user: User, done: any) => {
   done(null, newUser);
 });
 
-Passport.use(new GoogleStrategy(
-  {
-    clientID: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: `${routes.BASE}${routes.AUTH}/login/callback`,
-    passReqToCallback: true,
-  },
-  (async (request, accessToken, refreshToken, profile, done) => {
-    const newUser = {
-      id: profile.id,
-      name: profile.given_name,
-      lastName: profile.family_name,
-      email: profile.email,
-      avatarUrl: profile.picture,
-    };
-    try {
-      done(null, newUser);
-    } catch (e) {
-      done(e, null);
-    }
-  }),
-));
+Passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
+      callbackURL: `${routes.BASE}${routes.AUTH}/login/callback`,
+      passReqToCallback: true,
+    },
+    async (request, accessToken, refreshToken, profile, done) => {
+      const newUser = {
+        id: profile.id,
+        name: profile.given_name,
+        lastName: profile.family_name,
+        email: profile.email,
+        avatarUrl: profile.picture,
+      };
+      try {
+        done(null, newUser);
+      } catch (e) {
+        done(e, null);
+      }
+    },
+  ),
+);
