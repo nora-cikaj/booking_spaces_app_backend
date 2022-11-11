@@ -23,7 +23,7 @@ export const validateEvent = (requestBody: calendar_v3.Schema$Event) => {
         .required(),
       organizer: Joi.object()
         .keys({
-          displayName: Joi.string().min(1),
+          email: Joi.string().email().required(),
           self: Joi.boolean(),
         })
         .required(),
