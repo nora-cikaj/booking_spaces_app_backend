@@ -32,15 +32,16 @@ export const addCalendarEvent = async (event: calendar_v3.Schema$Event) => {
 };
 
 export const updateEvent = async (
-  event: calendar_v3.Schema$Event,
   id: string,
+  event: calendar_v3.Schema$Event,
 ) => {
-  await calendar.events.update({
+  const response = await calendar.events.update({
     auth: auth,
     calendarId: process.env.CALENDAR_ID,
     eventId: id,
     requestBody: event,
   });
+  return response;
 };
 
 export const deleteEvent = async (id: string) => {
@@ -49,6 +50,16 @@ export const deleteEvent = async (id: string) => {
     calendarId: process.env.CALENDAR_ID,
     eventId: id,
   });
+};
+
+export const moveEvent = async (eventId: string, destination: string) => {
+  const respose = await calendar.events.move({
+    auth: auth,
+    calendarId: process.env.CALENDAR_ID,
+    eventId: eventId,
+    destination,
+  });
+  return respose;
 };
 
 export const getEvent = async (id: string) => {

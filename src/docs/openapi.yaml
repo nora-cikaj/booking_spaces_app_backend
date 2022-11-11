@@ -17,8 +17,6 @@ tags:
   - name: Health
   - name: Authentication
   - name: User
-  - name: Space
-  - name: Booking
   - name: Event
   - name: Freebusy
 

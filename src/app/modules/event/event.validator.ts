@@ -21,7 +21,7 @@ export const validateEvent = (requestBody: calendar_v3.Schema$Event) => {
           timeZone: Joi.string(),
         })
         .required(),
-      creator: Joi.object()
+      organizer: Joi.object()
         .keys({
           displayName: Joi.string().min(1),
           self: Joi.boolean(),
@@ -63,7 +63,7 @@ export const validateUpdateEventRequest = (
     })
     .required();
 
-  const { error } = schema.validate(email);
+  const { error } = schema.validate({ email });
   if (error) {
     throw new BadRequest(error.details);
   }
@@ -76,7 +76,7 @@ export const validateDeleteEventRequest = (email: string) => {
     })
     .required();
 
-  const { error } = schema.validate(email);
+  const { error } = schema.validate({ email });
   if (error) {
     throw new BadRequest(error.details);
   }
