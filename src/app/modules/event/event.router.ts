@@ -103,46 +103,51 @@ router.route(`${routes.EVENT}`).get(controller.listEvents);
  *            schema:
  *              type: "object"
  *              properties:
- *                summary:
- *                  type: "string"
- *                description:
- *                  type: "string"
- *                start:
- *                  type: object
- *                  properties:
- *                    dateTime:
- *                      type: "string"
- *                    timeZone:
- *                      type: "string"
- *                end:
- *                  type: object
- *                  properties:
- *                    dateTime:
- *                      type: "string"
- *                    timeZone:
- *                      type: "string"
- *                creator:
+ *                event:
  *                  type: "object"
  *                  properties:
- *                    email:
+ *                    summary:
  *                      type: "string"
+ *                    description:
+ *                      type: "string"
+ *                    start:
+ *                      type: object
+ *                      properties:
+ *                        dateTime:
+ *                          type: "string"
+ *                        timeZone:
+ *                          type: "string"
+ *                    end:
+ *                      type: object
+ *                      properties:
+ *                        dateTime:
+ *                          type: "string"
+ *                        timeZone:
+ *                          type: "string"
+ *                    creator:
+ *                      type: "object"
+ *                      properties:
+ *                        email:
+ *                          type: "string"
  *                    organizer:
  *                      type: "boolean"
- *                    self:
- *                      type: "boolean"
- *                attendees:
- *                  type: array
- *                  items:
- *                    type: object
- *                    properties:
- *                      email:
- *                        type: "string"
- *                        format: "email"
- *                      resource:
+ *                      self:
  *                        type: "boolean"
- *                      organizer:
- *                        type: "boolean"
- *
+ *                    attendees:
+ *                      type: array
+ *                      items:
+ *                        type: object
+ *                        properties:
+ *                          email:
+ *                            type: "string"
+ *                            format: "email"
+ *                          resource:
+ *                            type: "boolean"
+ *                          organizer:
+ *                            type: "boolean"
+ *                email:
+ *                  type: "string"
+ *                  format: "email"
  *      responses:
  *        201:
  *          description: Event created successfully
@@ -183,46 +188,52 @@ router.route(`${routes.EVENT}`).post(controller.createEvent);
  *            schema:
  *              type: "object"
  *              properties:
- *                summary:
- *                  type: "string"
- *                description:
- *                  type: "string"
- *                start:
+ *                event:
  *                  type: "object"
  *                  properties:
- *                    dateTime:
+ *                    summary:
  *                      type: "string"
- *                    timeZone:
+ *                    description:
  *                      type: "string"
- *                end:
- *                  type: "object"
- *                  properties:
- *                    dateTime:
- *                      type: "string"
- *                    timeZone:
- *                      type: "string"
- *                creator:
- *                  type: "object"
- *                  properties:
- *                    email:
- *                      type: "string"
- *                      format: "email"
+ *                    start:
+ *                      type: "object"
+ *                      properties:
+ *                        dateTime:
+ *                          type: "string"
+ *                        timeZone:
+ *                          type: "string"
+ *                    end:
+ *                      type: "object"
+ *                      properties:
+ *                        dateTime:
+ *                          type: "string"
+ *                        timeZone:
+ *                          type: "string"
+ *                    creator:
+ *                      type: "object"
+ *                      properties:
+ *                        email:
+ *                          type: "string"
+ *                          format: "email"
  *                    organizer:
  *                      type: "boolean"
- *                    self:
- *                      type: "boolean"
- *                attendees:
- *                  type: array
- *                  items:
- *                    type: object
- *                    properties:
- *                      email:
- *                        type: "string"
- *                        format: "email"
- *                      resource:
+ *                      self:
  *                        type: "boolean"
- *                      organizer:
- *                        type: "boolean"
+ *                    attendees:
+ *                      type: array
+ *                      items:
+ *                        type: object
+ *                        properties:
+ *                          email:
+ *                            type: "string"
+ *                            format: "email"
+ *                          resource:
+ *                            type: "boolean"
+ *                          organizer:
+ *                            type: "boolean"
+ *                email:
+ *                  type: "string"
+ *                  format: "email"
  *      responses:
  *        200:
  *          description: Booking created successfully
@@ -261,6 +272,15 @@ router.route(`${routes.EVENT}/:id`).put(controller.updateEvent);
  *          description: Booking id
  *          type: number
  *          required: true
+ *      requestBody:
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: "object"
+ *              properties:
+ *                email:
+ *                  type: "string"
+ *                  format: "string"
  *      responses:
  *        204:
  *          description: Event deleted successfully

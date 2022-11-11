@@ -16,8 +16,10 @@ export const listEvents = async () => {
 export const createEvent = async (event: calendar_v3.Schema$Event) => {
   validator.validateEvent(event);
   try {
-    const result = await dal.addCalendarEvent(event);
-    return result;
+    const { data } = await dal.addCalendarEvent(event);
+    data.creator = event.creator;
+    const response = await dal.moveEvent(data.id, event.organizer.email);
+    return response.data;
   } catch (error) {
     throw new BadRequest(error.message);
   }
@@ -29,9 +31,9 @@ export const updateEvent = async (
   email: string,
 ) => {
   validator.validateUpdateEventRequest(event, email);
-  checkIfEventExists(id, email);
+  await checkIfEventExists(id, email);
   try {
-    await dal.updateEvent(event, id);
+    await dal.updateEvent(id, event);
   } catch (error) {
     throw new BadRequest(error.message);
   }
@@ -39,7 +41,7 @@ export const updateEvent = async (
 
 export const deleteEvent = async (id: string, email: string) => {
   validator.validateDeleteEventRequest(email);
-  checkIfEventExists(id, email);
+  await checkIfEventExists(id, email);
   try {
     await dal.deleteEvent(id);
   } catch (error) {

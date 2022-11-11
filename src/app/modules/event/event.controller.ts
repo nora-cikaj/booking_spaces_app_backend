@@ -34,7 +34,7 @@ export const updateEvent = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    await service.updateEvent(req.body.event, req.body.id, req.body.email);
+    await service.updateEvent(req.body.event, req.params.id, req.body.email);
     res.sendStatus(204);
   } catch (e) {
     next(e);
