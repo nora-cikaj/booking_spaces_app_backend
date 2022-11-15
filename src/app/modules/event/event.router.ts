@@ -70,6 +70,17 @@ const router = Router();
  *        - Event
  *      summary: List all events for a single day
  *      description: List events of the day
+ *      parameters:
+ *        - in: path
+ *          name: timeMin
+ *          description: Event earliest time
+ *          type: string
+ *          format: "datetime"
+ *        - in: path
+ *          name: timeMax
+ *          description: Event latest time
+ *          type: string
+ *          format: "datetime"
  *      responses:
  *        200:
  *          description: Events read successfully

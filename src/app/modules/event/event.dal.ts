@@ -1,24 +1,23 @@
 import { calendar_v3 } from 'googleapis';
-import momentTZ from 'moment-timezone';
-import moment from 'moment';
 import { NotFound } from '../../utils/errors';
 import { calendar, auth } from '../../config/client/serviceAccountClient';
+import { ListEventBodyType } from './event.type';
 
-export const listEvents = async () => {
-  const response = await calendar.events.list({
+export const listEvents = async (timeMin?: string, timeMax?: string) => {
+  const body: ListEventBodyType = {
     auth: auth,
     calendarId: process.env.CALENDAR_ID,
-    timeMin: moment(momentTZ().tz('Europe/Berlin').format())
-      .utc()
-      .startOf('day')
-      .toISOString(),
-    timeMax: moment(momentTZ().tz('Europe/Berlin').format())
-      .utc()
-      .endOf('day')
-      .toISOString(),
     singleEvents: true,
     orderBy: 'startTime',
-  });
+  };
+  if (timeMin) {
+    body.timeMin = timeMin;
+  }
+  if (timeMax) {
+    body.timeMax = timeMax;
+  }
+
+  const response = await calendar.events.list(body);
   return response.data.items;
 };
 

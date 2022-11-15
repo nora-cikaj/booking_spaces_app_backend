@@ -8,7 +8,7 @@ export const listEvents = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const result = await service.listEvents();
+    const result = await service.listEvents({ requestParams: req.query });
     res.status(200).json(result);
   } catch (e) {
     next(e);
