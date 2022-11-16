@@ -2,13 +2,14 @@
 import { calendar_v3 } from 'googleapis';
 import Joi from 'joi';
 import { BadRequest } from '../../utils/errors';
+import { QueryType } from './event.type';
 
 export const validateEvent = (requestBody: calendar_v3.Schema$Event) => {
   const schema = Joi.object()
     .required()
     .keys({
       summary: Joi.string().min(1).required(),
-      description: Joi.string().min(1).required(),
+      description: Joi.string().min(1),
       start: Joi.object()
         .keys({
           dateTime: Joi.date(),
@@ -41,6 +42,17 @@ export const validateEvent = (requestBody: calendar_v3.Schema$Event) => {
     });
 
   const { error } = schema.validate(requestBody);
+  if (error) {
+    throw new BadRequest(error.details);
+  }
+};
+
+export const validateGetAllEventsRequest = (requestParams: QueryType) => {
+  const schema = Joi.object().keys({
+    timeMin: Joi.date(),
+    timeMax: Joi.date(),
+  });
+  const { error } = schema.validate(requestParams);
   if (error) {
     throw new BadRequest(error.details);
   }

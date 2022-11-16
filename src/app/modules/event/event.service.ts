@@ -3,10 +3,15 @@ import { BadRequest } from '../../utils/errors';
 import * as dal from './event.dal';
 import * as validator from './event.validator';
 import { checkIfEventExists } from './event.middleware';
+import { RequestParamsType } from './event.type';
 
-export const listEvents = async () => {
+export const listEvents = async ({ requestParams }: RequestParamsType) => {
+  validator.validateGetAllEventsRequest(requestParams);
   try {
-    const response = await dal.listEvents();
+    const response = await dal.listEvents(
+      requestParams.timeMin,
+      requestParams.timeMax,
+    );
     return response;
   } catch (error) {
     throw new BadRequest(error.message);
