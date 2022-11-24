@@ -29,3 +29,17 @@ export const upsertUser = async (
     next(e);
   }
 };
+
+export const getAllActiveUsers = async (
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  const { user } = req;
+  try {
+    const users = await service.getAllActiveUsers();
+    res.status(200).send(users);
+  } catch (e) {
+    next(e);
+  }
+};
