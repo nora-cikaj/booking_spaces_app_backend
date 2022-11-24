@@ -10,6 +10,7 @@ export const validateEvent = (requestBody: calendar_v3.Schema$Event) => {
     .keys({
       summary: Joi.string().min(1).required(),
       description: Joi.string().min(1),
+      location: Joi.string(),
       start: Joi.object()
         .keys({
           dateTime: Joi.date(),
@@ -69,6 +70,7 @@ export const validateUpdateEventRequest = (
   email: string,
 ) => {
   validateEvent(requestBody);
+
   const schema = Joi.object()
     .keys({
       email: Joi.string().email().required(),

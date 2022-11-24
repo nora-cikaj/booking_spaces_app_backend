@@ -7,43 +7,39 @@ const router = Router();
 
 /**
  * @openapi
- *
- * components:
- *  schemas:
- *    User:
- *      type: "object"
- *      required:
- *        - id
- *        - email
- *        - admin
- *      properties:
- *        id:
- *          type: "string"
- *        name:
- *          type: "string"
- *        lastName:
- *          type: "string"
- *        email:
- *          type: "string"
- *        avatarUrl:
- *          type: "string"
- *        admin:
- *          type: "boolean"
- *        createdAt:
- *          type: "string"
- *
+ * paths:
  *  /logged-in-user:
  *    get:
  *      tags:
  *        - User
- *      summary: Get the logged in user
- *      description: Get the logged in user
+ *      summary: Get logged in user
+ *      description: Get logged in user
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: "object"
+ *              properties:
+ *                id:
+ *                  type: "string"
+ *                name:
+ *                  type: "string"
+ *                lastName:
+ *                  type: "string"
+ *                email:
+ *                  type: "string"
+ *                avatarUrl:
+ *                  type: "string"
  *      responses:
  *        200:
- *          description: User read successfully
+ *          description: User received successfully
  *          content:
  *            application/json:
- *              $ref: "#components/schemas/User"
+ *              schema:
+ *                $ref: "#components/schemas/User"
+ *        400:
+ *          $ref: "#components/responses/400"
  *        401:
  *          $ref: "#components/responses/401"
  *        500:
@@ -99,5 +95,47 @@ router
  */
 
 router.route(`${routes.USER}`).post(authenticated, controller.upsertUser);
+
+/**
+ * @openapi
+ * paths:
+ *  /user:
+ *    get:
+ *      tags:
+ *        - User
+ *      summary: Get all active users
+ *      description: Get all active users
+ *      requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: "object"
+ *              properties:
+ *                id:
+ *                  type: "string"
+ *                name:
+ *                  type: "string"
+ *                lastName:
+ *                  type: "string"
+ *                email:
+ *                  type: "string"
+ *                avatarUrl:
+ *                  type: "string"
+ *      responses:
+ *        200:
+ *          description: Users received successfully
+ *          content:
+ *            application/json:
+ *              schema:
+ *                $ref: "#components/schemas/User"
+ *        400:
+ *          $ref: "#components/responses/400"
+ *        401:
+ *          $ref: "#components/responses/401"
+ *        500:
+ *          $ref: "#components/responses/500"
+ */
+router.route(`${routes.USER}`).get(authenticated, controller.getAllActiveUsers);
 
 export default router;

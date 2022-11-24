@@ -34,7 +34,7 @@ export const updateEvent = async (
   id: string,
   event: calendar_v3.Schema$Event,
 ) => {
-  const response = await calendar.events.update({
+  const response = await calendar.events.patch({
     auth: auth,
     calendarId: process.env.CALENDAR_ID,
     eventId: id,

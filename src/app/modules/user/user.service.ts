@@ -16,3 +16,10 @@ export const upsertUser = async ({
   const response = await dal.upsertUser({ query, requestBody });
   return response;
 };
+
+export const getAllActiveUsers = async () => {
+  // const data = validateCreateUserRequest({ requestBody });
+
+  const users = await dal.getAllActiveUsers();
+  return users;
+};
