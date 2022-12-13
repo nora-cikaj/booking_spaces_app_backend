@@ -1,0 +1,749 @@
+openapi: '3.0.0'
+
+info:
+  version: '1.0.0'
+  title: 'Boothup API'
+  description: |
+    #### Boothup - Booth Reservation System
+    ## CAUTION!
+    ### This documentation is read only! To test the endpoints use Postman.
+
+servers:
+  - url: http://localhost:{port}/{base_path}
+    description: Local development server
+    variables:
+      port:
+        default: '4000'
+      base_path:
+        default: 'api/v1'
+tags:
+  - name: Health
+  - name: Authentication
+  - name: User
+  - name: Event
+  - name: Freebusy
+  - name: Users
+
+paths:
+  /health:
+    get:
+      tags:
+        - Health
+      summary: Get server status
+      responses:
+        200:
+          description: Server OK.
+          content:
+            application/json:
+              schema:
+                properties:
+                  appName:
+                    type: string
+                    example: 'Finance Management System Guide'
+                  version:
+                    type: string
+                    example: '1.0.0'
+                  status:
+                    type: string
+                    example: 'OK'
+  /auth/login:
+    get:
+      tags:
+        - Authentication
+      summary: Log in
+      description: Log in user using google sign in
+  /auth/login/callback:
+    get:
+      tags:
+        - Authentication
+      summary: Log in
+      description: Log in user using google sign in
+
+  /logged-in-user:
+    get:
+      tags:
+        - User
+      summary: Get logged in user
+      description: Get logged in user
+      responses:
+        200:
+          description: User received successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/User'
+        400:
+          $ref: '#components/responses/400'
+        401:
+          $ref: '#components/responses/401'
+        500:
+          $ref: '#components/responses/500'
+
+  /user:
+    post:
+      tags:
+        - User
+      summary: Upsert user
+      description: Create a new user or update the existing one
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              required:
+                - id
+                - email
+              properties:
+                id:
+                  type: 'string'
+                name:
+                  type: 'string'
+                lastName:
+                  type: 'string'
+                email:
+                  type: 'string'
+                avatarUrl:
+                  type: 'string'
+      responses:
+        200:
+          description: Users created successfully
+          content:
+            application/json:
+              schema:
+                type: 'array'
+                items:
+                  $ref: '#components/schemas/User'
+        400:
+          $ref: '#components/responses/400'
+        401:
+          $ref: '#components/responses/401'
+        500:
+          $ref: '#components/responses/500'
+
+    get:
+      tags:
+        - User
+      summary: Get all active users
+      description: Get all active users
+      responses:
+        200:
+          description: Users received successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/User'
+        400:
+          $ref: '#components/responses/400'
+        401:
+          $ref: '#components/responses/401'
+        500:
+          $ref: '#components/responses/500'
+
+  /events:
+    get:
+      tags:
+        - Event
+      summary: List all events for a single day
+      description: List events of the day
+      parameters:
+        - in: path
+          name: timeMin
+          description: Event earliest time
+          type: string
+          format: 'datetime'
+        - in: path
+          name: timeMax
+          description: Event latest time
+          type: string
+          format: 'datetime'
+      responses:
+        200:
+          description: Events read successfully
+          content:
+            application/json:
+              schema:
+                type: 'array'
+                items:
+                  $ref: '#components/schemas/Event'
+        400:
+          $ref: '#components/responses/400'
+        401:
+          $ref: '#components/responses/401'
+        500:
+          $ref: '#components/responses/500'
+    post:
+      tags:
+        - Event
+      summary: Create an event
+      description: Create an event
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties:
+                event:
+                  type: 'object'
+                  properties:
+                    summary:
+                      type: 'string'
+                    description:
+                      type: 'string'
+                    start:
+                      type: object
+                      properties:
+                        dateTime:
+                          type: 'string'
+                        timeZone:
+                          type: 'string'
+                    end:
+                      type: object
+                      properties:
+                        dateTime:
+                          type: 'string'
+                        timeZone:
+                          type: 'string'
+                    creator:
+                      type: 'object'
+                      properties:
+                        email:
+                          type: 'string'
+                    organizer:
+                      type: 'boolean'
+                      self:
+                        type: 'boolean'
+                    attendees:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          email:
+                            type: 'string'
+                            format: 'email'
+                          resource:
+                            type: 'boolean'
+                          organizer:
+                            type: 'boolean'
+                email:
+                  type: 'string'
+                  format: 'email'
+      responses:
+        201:
+          description: Event created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Event'
+        400:
+          $ref: '#components/responses/400'
+        401:
+          $ref: '#components/responses/401'
+        404:
+          $ref: '#components/responses/404'
+        500:
+          $ref: '#components/responses/500'
+  /events/{id}:
+    put:
+      tags:
+        - Event
+      summary: Update an event
+      description: Update an event
+      parameters:
+        - in: path
+          name: id
+          description: Event id
+          type: string
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties:
+                event:
+                  type: 'object'
+                  properties:
+                    summary:
+                      type: 'string'
+                    description:
+                      type: 'string'
+                    start:
+                      type: 'object'
+                      properties:
+                        dateTime:
+                          type: 'string'
+                        timeZone:
+                          type: 'string'
+                    end:
+                      type: 'object'
+                      properties:
+                        dateTime:
+                          type: 'string'
+                        timeZone:
+                          type: 'string'
+                    creator:
+                      type: 'object'
+                      properties:
+                        email:
+                          type: 'string'
+                          format: 'email'
+                    organizer:
+                      type: 'boolean'
+                      self:
+                        type: 'boolean'
+                    attendees:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          email:
+                            type: 'string'
+                            format: 'email'
+                          resource:
+                            type: 'boolean'
+                          organizer:
+                            type: 'boolean'
+                email:
+                  type: 'string'
+                  format: 'email'
+      responses:
+        200:
+          description: Booking created successfully
+          content:
+            application/json:
+              schema:
+                type: 'array'
+                items:
+                  $ref: '#components/schemas/Event'
+        400:
+          $ref: '#components/responses/400'
+        401:
+          $ref: '#components/responses/401'
+        403:
+          $ref: '#components/responses/403'
+        404:
+          $ref: '#components/responses/404'
+        500:
+          $ref: '#components/responses/500'
+    delete:
+      tags:
+        - Event
+      summary: Delete an event
+      description: Delete an event
+      parameters:
+        - in: path
+          name: id
+          description: Booking id
+          type: number
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties:
+                email:
+                  type: 'string'
+                  format: 'string'
+      responses:
+        204:
+          description: Event deleted successfully
+        400:
+          $ref: '#components/responses/400'
+        401:
+          $ref: '#components/responses/401'
+        403:
+          $ref: '#components/responses/403'
+        404:
+          $ref: '#components/responses/404'
+        500:
+          $ref: '#components/responses/500'
+  /freebusy:
+    post:
+      tags:
+        - Freebusy
+      summary: List freebusy of a specific calendar
+      description: List freebusy of a specific calendar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: 'object'
+              properties:
+                timeMin:
+                  type: 'string'
+                timeMax:
+                  type: 'string'
+      responses:
+        200:
+          description: Freebusy were read successfully
+          content:
+            application/json:
+              schema:
+                type: 'array'
+                items:
+                  $ref: '#components/schemas/Freebusy'
+        400:
+          $ref: '#components/responses/400'
+        401:
+          $ref: '#components/responses/401'
+        500:
+          $ref: '#components/responses/500'
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Get all Softup members
+      description: List all Softyp members
+      responses:
+        200:
+          description: Users read successfully
+          content:
+            application/json:
+              schema:
+                type: 'array'
+                items:
+                  $ref: '#components/schemas/Users'
+        400:
+          $ref: '#components/responses/400'
+        401:
+          $ref: '#components/responses/401'
+        500:
+          $ref: '#components/responses/500'
+  /resources:
+    get:
+      tags:
+        - Resources
+      summary: Get resources
+      description: Get all resources
+      responses:
+        200:
+          description: Resources read successfully
+          content:
+            application/json:
+              schema:
+                type: 'array'
+                items:
+                  $ref: '#components/schemas/Resources'
+        401:
+          $ref: '#components/responses/401'
+        404:
+          $ref: '#components/responses/404'
+        500:
+          $ref: '#components/responses/500'
+
+components:
+  schemas:
+    Error:
+      properties:
+        code:
+          type: string
+          description: Debug Id
+        name:
+          type: string
+          description: A human-readable error name
+        message:
+          type: string
+          description: A human-readable error message
+        details:
+          oneOf:
+            - type: string
+              description: A more specific human-readable error message
+            - type: object
+              description: A more specific human-readable error message together with some details
+            - type: array
+              description: An array with issues from multiple fields (e.g. input validation)
+
+    User:
+      type: 'object'
+      properties:
+        id:
+          type: 'string'
+        _id:
+          type: 'string'
+        avatarUrl:
+          type: 'string'
+        email:
+          type: 'string'
+        lastName:
+          type: 'string'
+        name:
+          type: 'string'
+        myEvents:
+          type: 'array'
+          items:
+            type: 'string'
+
+    Event:
+      type: 'object'
+      required:
+        - id
+        - summary
+        - attendees
+        - start
+        - end
+        - creator
+      properties:
+        id:
+          type: 'string'
+        summary:
+          type: 'string'
+        description:
+          type: 'string'
+        start:
+          type: object
+          properties:
+            dateTime:
+              type: 'string'
+            timeZone:
+              type: 'string'
+        end:
+          type: 'object'
+          properties:
+            dateTime:
+              type: 'string'
+            timeZone:
+              type: 'string'
+        creator:
+          type: 'object'
+          properties:
+            displayName:
+              type: 'string'
+            timeZone:
+              self: 'string'
+        attendees:
+          type: array
+          items:
+            type: object
+            properties:
+              email:
+                type: 'string'
+                format: 'email'
+              resource:
+                type: 'boolean'
+              organizer:
+                type: 'boolean'
+    Freebusy:
+      type: 'object'
+      required:
+        - timeMin
+        - timeMax
+      properties:
+        kind:
+          type: 'string'
+        timeMin:
+          type: 'string'
+          format: 'datetime'
+        timeMax:
+          type: 'string'
+          format: 'datetime'
+        calendars:
+          type: object
+          properties:
+            busy:
+              type: 'array'
+              items:
+                type: 'object'
+                properties:
+                  start:
+                    type: 'string'
+                    format: 'datetime'
+                  end:
+                    type: 'string'
+                    format: 'datetime'
+    Users:
+      type: 'object'
+      properties:
+        id:
+          type: 'string'
+        kind:
+          type: 'string'
+        etag:
+          type: 'string'
+        primaryEmail:
+          type: 'string'
+          format: 'email'
+        name:
+          type: 'object'
+          properties:
+            givenName:
+              type: 'string'
+            familyName:
+              type: 'string'
+            fullName:
+              type: 'string'
+        isAdmin:
+          type: 'boolean'
+        isDelegatedAdmin:
+          type: 'boolean'
+        lastLoginTime:
+          type: 'string'
+        creationTime:
+          type: 'string'
+        agreedToTerms:
+          type: 'boolean'
+        suspanded:
+          type: 'boolean'
+        archived:
+          type: 'boolean'
+        changePasswordAtNextLogin:
+          type: 'boolean'
+        ipWhitelisted:
+          type: 'boolean'
+        emails:
+          type: 'array'
+          items:
+            type: 'object'
+            properties:
+              address:
+                type: 'string'
+        languages:
+          type: 'array'
+          items:
+            type: 'object'
+            properties:
+              languageCode:
+                type: 'string'
+              preference:
+                type: 'string'
+        nonEditableAliases:
+          type: 'array'
+          items:
+            type: 'string'
+        customerId:
+          type: 'string'
+        orgUnitPath:
+          type: 'string'
+        isMailboxSetup:
+          type: 'boolean'
+        isEnrolledIn2Sv:
+          type: 'boolean'
+        isEnforcedIn2Sv:
+          type: 'boolean'
+        includeInGlobalAddressList:
+          type: 'boolean'
+        thumbnailPhotoUrl:
+          type: 'string'
+        thumbnailPhotoEtag:
+          type: 'string'
+        recoveryPhone:
+          type: 'string'
+    Resources:
+      type: 'object'
+      properties:
+        kind:
+          type: 'string'
+        etags:
+          type: 'string'
+        resourceId:
+          type: 'string'
+        resourceName:
+          type: 'string'
+        generatedResourceName:
+          type: 'string'
+        resourceType:
+          type: 'string'
+        resourceEmail:
+          type: 'string'
+        capacity:
+          type: 'number'
+        buildingId:
+          type: 'string'
+        floorName:
+          type: 'string'
+        resourceCategory:
+          type: 'string'
+        userVisibleDescription:
+          type: 'string'
+
+  responses:
+    400:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: ckgjkxvgl000431pp4xlpew2g
+            name: Bad Request
+            message: Your request contains invalid or missing data
+            details:
+              [
+                {
+                  message: '"{fieldName}" must be a valid {fieldType}',
+                  path: ['{pathToField}'],
+                },
+              ]
+    401:
+      description: Not Authenticated
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: ckgjkxvgl000431pp4xlpew2g
+            name: Not Authenticated
+            message: Missing authentication or invalid credentials
+    403:
+      description: Not Authorized / Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: ckgjkxvgl000431pp4xlpew2g
+            name: Not Authorized / Forbidden
+            message: Your request cannot be completed due to missing permissions
+    404:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: ckgjkxvgl000431pp4xlpew2g
+            name: Not Found
+            message: The requested item was not found
+    422:
+      description: Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: ckgjkxvgl000431pp4xlpew2g
+            name: Unprocessable Entity
+            message: Your request was understood but could not be completed due to semantic errors
+    500:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: ckgjkxvgl000431pp4xlpew2g
+            name: Internal Server Error
+            message: Operation cannot be completed due to a problem
+  parameters:
+    skip:
+      name: skip
+      in: query
+      description: Number of records to skip (for pagination)
+      schema:
+        type: string
+    limit:
+      name: limit
+      in: query
+      description: Page size (for pagination)
+      schema:
+        type: string
+
+  examples:
+    UserNotFound:
+      value:
+        code: ckgjkxvgl000431pp4xlpew2g
+        name: Not Found
+        message: The requested item was not found
+        details: The requested user does not exist in our database
+      summary: User not found

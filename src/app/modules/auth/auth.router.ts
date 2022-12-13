@@ -6,35 +6,9 @@ import './authenticate';
 
 const router = Router();
 
-/**
- * @openapi
- *
- * paths:
- *  /auth/login:
- *    get:
- *      tags:
- *        - Authentication
- *      summary: Log in
- *      description: Log in user using google sign in
- *
-*/
-
-router.route(`${routes.AUTH}/login`).get(
-  Passport.authenticate('google', { scope: ['email', 'profile'] }),
-);
-
-/**
- * @openapi
- *
- * paths:
- *  /auth/login/callback:
- *    get:
- *      tags:
- *        - Authentication
- *      summary: Log in
- *      description: Log in user using google sign in
- *
-*/
+router
+  .route(`${routes.AUTH}/login`)
+  .get(Passport.authenticate('google', { scope: ['email', 'profile'] }));
 
 router.route(`${routes.AUTH}/login/callback`).get(
   Passport.authenticate('google', {
@@ -43,8 +17,9 @@ router.route(`${routes.AUTH}/login/callback`).get(
   }),
 );
 
-router.route(`${routes.AUTH}/logout`).get(
-  (req: CustomRequest, res: Response, next: NextFunction) => {
+router
+  .route(`${routes.AUTH}/logout`)
+  .get((req: CustomRequest, res: Response, next: NextFunction) => {
     req.logout((error) => {
       if (error) {
         return next(error);
@@ -52,13 +27,12 @@ router.route(`${routes.AUTH}/logout`).get(
     });
     req.session.destroy();
     res.status(200).send();
-  },
-);
+  });
 
-router.route(`${routes.AUTH}/google/failure`).get(
-  (req: CustomRequest, res: Response) => {
+router
+  .route(`${routes.AUTH}/google/failure`)
+  .get((req: CustomRequest, res: Response) => {
     res.status(400).send('Failed to authenticate');
-  },
-);
+  });
 
 export default router;
