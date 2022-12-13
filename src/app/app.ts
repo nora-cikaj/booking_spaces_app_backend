@@ -30,12 +30,6 @@ const initExpressApp = async () => {
       secret: process.env.SESSION_SECRET,
       resave: true,
       saveUninitialized: true,
-      // Cookies added only on production (https protocol)
-      // cookie: {
-      //   sameSite: 'none',
-      //   secure: true,
-      //   maxAge: 1000 * 60 * 60 * 24 * 7, // One Week
-      // },
     }),
   );
 
@@ -43,11 +37,6 @@ const initExpressApp = async () => {
   app.use(passport.session());
 
   app.use(routes.BASE, router);
-
-  // Will be removed, testing purpose
-  app.get('/', (req, res) => {
-    return res.send(`<a href="${routes.BASE}${routes.AUTH}/login">Authenticate with Google</a>`);
-  });
 
   app.get('/protected', authenticated, (req: CustomRequest, res) => {
     return res.send(req.user);
@@ -64,18 +53,17 @@ const initExpressApp = async () => {
 
   // Setup docs
 
-  const docsFilePath: string = Path.resolve(__dirname, '../docs/openapi.yaml');
+  const docsFilePath: string = Path.resolve(
+    __dirname,
+    '../docs/swaggerApi.yaml',
+  );
   const jsonDocsFile = YAML.load(docsFilePath);
   const docs = SwaggerJsdoc({
     swaggerDefinition: jsonDocsFile,
     apis: ['./src/app/**/*.ts'],
   });
 
-  app.use(
-    '/api/swagger',
-    SwaggerUI.serve,
-    SwaggerUI.setup(docs),
-  );
+  app.use('/api/swagger', SwaggerUI.serve, SwaggerUI.setup(docs));
 
   // Error handling
   app.use(errorHandler);
